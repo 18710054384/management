@@ -4,6 +4,8 @@ const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const app = express()
 app.use(bodyParser.json())
+//静态文件
+app.use(express.static('./'));
 let api = require('./api.js')
 
 // //token验证
@@ -31,8 +33,6 @@ app.all('*', function (req, res, next) {
 })
 
 api(app)
-//静态文件
-app.use(express.static('./'));
 app.listen(9000, function () {
     console.log('server listen 9000')
 })

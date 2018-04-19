@@ -14,42 +14,7 @@
       <el-col>
         <el-row>
           <el-col>
-            <el-tabs v-model="activeName" @tab-click="handleClick">
-              <el-tab-pane label="创意1" name="first">
-                <el-upload
-                  class="avatar-uploader"
-                  action="http://localhost:9000/Creative/upload"
-                  :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
-                  :before-upload="beforeAvatarUpload">
-                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-              </el-tab-pane>
-              <el-tab-pane  @tab-click.native="centerDialogVisibles" label="+添加创意" name="add">
-                <el-dialog title="选择模板" :visible.sync="centerDialogVisible" width="30%">
-                  <div class="add-left" @click="select('single')">
-                    <div class="simple">
-                      <div class="simple-power"></div>
-                      <div>
-                        <p class="simple-head"></p>
-                        <p class="simple-head"></p>
-                      </div>
-                    </div>
-                    <div class="simples">单图</div>
-                  </div>
-                  <div class="add-right" @click="select('multiple')">
-                    <p class="simple-head"></p>
-                    <div>
-                      <p class="simple-power"></p>
-                      <p class="simple-power"></p>
-                      <p class="simple-power"></p>
-                    </div>
-                    <div class="simples">多图</div>
-                  </div>
-                </el-dialog>
-              </el-tab-pane>
-            </el-tabs>
+            <tpl-new-create :formData="formData" @edit="addNewCreate"></tpl-new-create>
           </el-col>
         </el-row>
         <el-row>
@@ -75,57 +40,31 @@
 </template>
 
 <script>
+import tplNewCreate from '../../../components/newCreate/newCreate.vue'
 export default {
   data () {
     return {
       input: '',
-      activeName: 'first',
-      imageUrl: '',
       form: {
         name: '',
         monitoring: ''
       },
-      centerDialogVisible: false,
-      type: ''
+      len: 1,
+      formData: [{
+        label: '创意1',
+        name: 'tab-create1'
+      }]
     }
   },
+  components: {
+    tplNewCreate
+  },
   methods: {
-    centerDialogVisibles () {
-      this.centerDialogVisible = true
-    },
-    select (type) {
-      if (this.centerDialogVisible) {
-        if (type) {
-          this.type = type
-        }
-      }
-      if (this.type === 'single') {
-        this.activeName = 'first'
-        this.centerDialogVisible = false
-      } else if (this.type === 'multiple') {
-        this.activeName = 'second'
-        this.centerDialogVisible = false
-      }
-    },
-    handleClick (tab, event) {
-      if (tab.name === 'add') {
-        this.centerDialogVisibles()
-      }
-    },
-    handleAvatarSuccess (res, file) {
-      this.imageUrl = 'http://localhost:9000/' + res.data.value
-    },
-    beforeAvatarUpload (file) {
-      const isJPG = file.type === 'image/jpeg' || 'image/jpg' || 'image/JPG' || 'image/png' || 'image/PNG'
-      const isLt2M = file.size / 1024 / 1024 < 5
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
+    addNewCreate () {
+      this.formData.push({
+        label: '创意' + (++this.len),
+        name: 'tab-create' + this.len
+      })
     }
   }
 }

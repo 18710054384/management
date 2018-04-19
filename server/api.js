@@ -1,6 +1,5 @@
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
-
 var multer = require('multer')
 var storage = multer.diskStorage({
 //设置上传后文件路径，uploads文件夹会自动创建。
@@ -46,16 +45,38 @@ module.exports = function (app) {
     })
 
     //upload 上传接口
-    app.post('/Creative/upload',upload.single('file'),function(req,res){   
-        res.send({
-            "data": {
-                       "size":req.file.size,
-                       "value":req.file.path,
-                       "key":"2A36B67C6"
-                },
-            "status":0
-          }
+    app.post('/Creative/upload',upload.single('file'),function(req,res){
+        let homeData = JSON.parse(fs.readFileSync(__dirname+'/data/data.json'))
+        let data = {
+            "size":req.file.size,
+            "img":req.file.path,
+            "key":"2A36B67C6",
+            "material": "2016-05-02",
+            "materialId": "171102-4",
+            "materialType": "图文（单）",
+            "fall": "https://baidu.com",
+            "monitor": "https://www.baidu.com",
+            "element": "123456",
+            "plan": "DD-广告测试团队",
+            "exposure": 2000,
+            "click": 1000,
+            "status": "投放中"
+        }
+        homeData.push(data)
+        fs.writeFileSync(__dirname+'/data/data.json',JSON.stringify(homeData))
+        res.end(JSON.stringify({
+            "status":"0",
+            "data": data,
+          })
         )
+    })
+    
+    app.post('/Creative/origin',function(req,res){
+        let OriginData = JSON.parse(fs.readFileSync(__dirname+'/data/data.json'))
+        res.end(JSON.stringify({
+            "status": 0,
+            "data": OriginData
+        })) 
     })
 
 }

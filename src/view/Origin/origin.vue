@@ -63,65 +63,43 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="24">
+        <el-col>
+          <table>
+            <thead>
+              <tr>
+                <td>创意素材</td>
+                <td>创意ID</td>
+                <td>创意类型</td>
+                <td>尺寸</td>
+                <td>落地页链接</td>
+                <td>监测链接</td>
+                <td>所属单元</td>
+                <td>所属计划</td>
+                <td>曝光量</td>
+                <td>点击量</td>
+                <td>状态</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(x,idx) in origin" :key="idx">
+                <td>{{x.material}}</td>
+                <td>{{x.materialId}}</td>
+                <td>{{x.materialType}}</td>
+                <td>{{x.size}}</td>
+                <td>{{x.fall}}</td>
+                <td>{{x.monitor}}</td>
+                <td>{{x.element}}</td>
+                <td>{{x.plan}}</td>
+                <td>{{x.exposure}}</td>
+                <td>{{x.click}}</td>
+                <td>{{x.status}}</td>
+              </tr>
+            </tbody>
+          </table>
           <el-table
             :data="tableData"
-            style="width: 100%">
-            <el-table-column
-              prop="material"
-              label="创意素材"
-              width="100">
-            </el-table-column>
-            <el-table-column
-              prop="materialId"
-              label="创意ID"
-              width="90">
-            </el-table-column>
-            <el-table-column
-              prop="materialType"
-              label="创意类型"
-              width="90">
-            </el-table-column>
-            <el-table-column
-              prop="size"
-              label="尺寸"
-              width="80">
-            </el-table-column>
-            <el-table-column
-              prop="fall"
-              label="落地页链接"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="monitor"
-              label="监测链接"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="element"
-              label="所属单元"
-              width="80">
-            </el-table-column>
-            <el-table-column
-              prop="plan"
-              label="所属计划"
-              width="100">
-            </el-table-column>
-            <el-table-column
-              prop="exposure"
-              label="曝光量"
-              width="70">
-            </el-table-column>
-            <el-table-column
-              prop="click"
-              label="点击量"
-              width="70">
-            </el-table-column>
-            <el-table-column
-              prop="status"
-              label="状态"
-              width="70">
-            </el-table-column>
+            style="width: 100%" >
+            
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" size="mini" @click="dialogVisible = true">编辑</el-button>
@@ -158,6 +136,8 @@
 </template>
 
 <script>
+import { origin } from '../../until/request'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -166,59 +146,25 @@ export default {
       select: '',
       value: '',
       value1: '',
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      options: [
+        {
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }
+      ],
       tableData: [{
-        material: '2016-05-02',
-        materialId: '171102-4',
-        materialType: '图文（单）',
-        size: '320*240',
-        fall: 'https://baidu.com',
-        monitor: 'https://www.baidu.com',
-        element: '123456',
-        plan: 'DD-广告测试团队',
-        exposure: 2000,
-        click: 1000,
-        status: '投放中'
-      }, {
-        material: '2016-05-02',
-        materialId: '171102-4',
-        materialType: '图文（单）',
-        size: '320*240',
-        fall: 'https://baidu.com',
-        monitor: 'https://www.baidu.com',
-        element: '123456',
-        plan: 'DD-广告测试团队',
-        exposure: 2000,
-        click: 1000,
-        status: '投放中'
-      }, {
-        material: '2016-05-02',
-        materialId: '171102-4',
-        materialType: '图文（单）',
-        size: '320*240',
-        fall: 'https://baidu.com',
-        monitor: 'https://www.baidu.com',
-        element: '123456',
-        plan: 'DD-广告测试团队',
-        exposure: 2000,
-        click: 1000,
-        status: '投放中'
-      }, {
         material: '2016-05-02',
         materialId: '171102-4',
         materialType: '图文（单）',
@@ -233,6 +179,9 @@ export default {
       }]
     }
   },
+  computed: {
+    ...mapState(['origin'])
+  },
   methods: {
     handleClose (done) {
       this.$confirm('确认关闭？')
@@ -244,6 +193,12 @@ export default {
     handleDelete (index, row) {
       console.log(index, row)
     }
+  },
+  mounted () {
+    origin().then(res=> {
+      this.$store.commit('saveOrigin',res.data)
+    })
+    console.log(origin)
   }
 }
 </script>

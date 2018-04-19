@@ -40,3 +40,11 @@ export function login (loginInfo) {
     })
   })
 }
+
+export function origin () {
+  return new Promise((resolve, reject) => {
+    instance.post('/Creative/origin').then(res=>{
+      resolve(res)
+    })
+  })
+}
