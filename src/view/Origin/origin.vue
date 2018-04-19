@@ -64,7 +64,7 @@
       </el-row>
       <el-row>
         <el-col>
-          <table>
+          <!-- <table>
             <thead>
               <tr>
                 <td>创意素材</td>
@@ -95,11 +95,32 @@
                 <td>{{x.status}}</td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
           <el-table
             :data="tableData"
             style="width: 100%" >
-            
+            <el-table-column prop="material" label="创意素材" width="100">
+            </el-table-column>
+            <el-table-column prop="materialId" label="创意ID" width="90">
+            </el-table-column>
+            <el-table-column prop="materialType" label="创意类型" width="90">
+            </el-table-column>
+            <el-table-column prop="size" label="尺寸" width="80">
+            </el-table-column>
+            <el-table-column prop="fall" label="落地页链接" width="120">
+            </el-table-column>
+            <el-table-column prop="monitor" label="监测链接" width="120">
+            </el-table-column>
+            <el-table-column prop="element" label="所属单元" width="80">
+            </el-table-column>
+            <el-table-column prop="plan" label="所属计划" width="100">
+            </el-table-column>
+            <el-table-column prop="exposure" label="曝光量" width="70">
+            </el-table-column>
+            <el-table-column prop="click" label="点击量" width="70">
+            </el-table-column>
+            <el-table-column prop="status" label="状态" width="70">
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" size="mini" @click="dialogVisible = true">编辑</el-button>
@@ -137,7 +158,6 @@
 
 <script>
 import { origin } from '../../until/request'
-import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -179,9 +199,6 @@ export default {
       }]
     }
   },
-  computed: {
-    ...mapState(['origin'])
-  },
   methods: {
     handleClose (done) {
       this.$confirm('确认关闭？')
@@ -195,19 +212,20 @@ export default {
     }
   },
   mounted () {
-    origin().then(res=> {
-      this.$store.commit('saveOrigin',res.data)
+    this.tableData = this.$store.state.originData
+    origin().then(res => {
+      this.$store.commit('saveOrigin', res.data)
     })
     console.log(origin)
   }
 }
 </script>
+
+<style>
 .el-select .el-input {
   width: 130px;
 }
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
 }
-<style>
-
 </style>

@@ -6,7 +6,7 @@ let mutations = {
     state.username = payload
   },
   saveOrigin (state, payload) {
-    state.origin = payload
+    state.originData = payload
   }
 }
 

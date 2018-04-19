@@ -1,7 +1,7 @@
 let state = {
   token: '',
   username: '请登录',
-  origin: []
+  originData: []
 }
 
 export default state
